@@ -35,6 +35,8 @@ translation text
         self.last_translation_id += 1
         self.db.execute("INSERT INTO translations VALUES(%s, %s,'%s')" % (self.last_translation_id,id_word,translation))
 
-    def get_translation(self, id_translation):
-        self.db.execute("DELETE FROM translations WHERE id=%s"  % id_translation)
-
+    def get_translation(self, word):
+        cursor_word = self.db.execute("SELECT id FROM words WHERE word='%s'" % word)
+        id_word = cursor_word.fetchone()[0]
+        cur = self.db.execute("SELECT translation FROM translations WHERE id_word=%s"  % id_word)
+        return [f[0] for f in cur.fetchall()]
