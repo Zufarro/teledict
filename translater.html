@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru_RU">
+<head>
+	<meta charset="UTF-8">
+	<title>Переводчик</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<header><div class="logo">TranslateHelper</div> <hr>
+</header> 
+
+<div class="wrapper"><div class="button" id="button_not_active">Переводчик</div><a href="dictionary.html"><div class="button" id="button_active">Словарь</div></a></div>
+
+<div class="content">
+
+	<div class="title"><h1>Переводчик</h1></div>
+	<div class="tr_wrapper">
+		<div class="choose_tr">
+<select name="word_lang" form="translater">
+	<option selected="selected">Выберите язык ввода</option>
+  <option value="en">EN</option>
+  <option value="ru">RU</option>
+  <option value="ge">GE</option>
+</select>
+<br>
+<br>
+<select name="translate_lang" form="translater">
+	<option selected="selected">Выберите язык перевода</option>
+  <option value="en">EN</option>
+  <option value="ru">RU</option>
+  <option value="ge">GE</option>
+</select>
+	</div>
+<div class="tr"><br><form id="translater" action=""><input type="text" name="word" placeholder="Введите слово" size="35px">
+<input type="submit" value="Перевести">
+<br>
+ <br><input type="text" name="translater" value="" readonly size="48px">
+</form></div>
+</div></div>
+
+
+	<footer><p>Zufar 2019</p>
+</footer>
+	
+</body>
+</html>
