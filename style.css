@@ -1,50 +1,46 @@
 footer, nav, header, section, aside {
- 
-display: block
- 
+  display: block
 }
 
 header hr{
-
-color:#eee;
+  color:#eee;
 }
 
 
 .content {
-	     background-color: #eee;
-	     max-width: 960px;
-	     margin: 0 auto;
-         height: 200px;
-
-         
+  background-color: #eee;
+  max-width: 1280px;
+  margin: 0 auto;
+  height: 200px;
 }
 
 .tr_wrapper{
-	display: flex;
-		     max-width: 700px;
-	     margin: 0 auto;
+  display: flex;
+  max-width: 700px;
+  margin: 0 auto;
 }
+
 .choose_tr {
-                background-color: #ddd;
-                width: 360px;
-                padding: 15px;
+  background-color: #ddd;
+  width: 360px;
+  padding: 15px;
+}
 
-            }
+
 .tr_wrapper{
-padding: 15px;
+  padding: 15px;
 }
 
 
 .button {
-	width: 150px;
-	text-align:center;
-	border-radius: 7px 7px 0 0;
-	padding: 5px;
-
+  width: 150px;
+  text-align:center;
+  border-radius: 7px 7px 0 0;
+  padding: 5px;
 }
 
 #button_active{
-	background-color:#3a7999;
+  background-color:#3a7999;
 	color: #f2f2f2;
 }
 
@@ -57,14 +53,14 @@ padding: 15px;
 }
 
 .wrapper{
-		display: flex;
-	    max-width: 960px;
-	    margin: 0 auto;
-	    margin-top: 15px;
+  display: flex;
+  max-width: 1280px;
+  margin: 0 auto;
+  margin-top: 15px;
 }
-footer {
-	text-align: center;
 
+footer {
+  text-align: center;
 }
 
 h1{
@@ -79,11 +75,9 @@ h1{
 	height: 30px;
 	background-color: #7bc96f;
 	color: white;
-        display: table-cell;
-        vertical-align: middle;
-        text-align:center;
-
-
+  display: table-cell;
+  vertical-align: middle;
+  text-align:center;
 }
 
 .add_new_translation {
@@ -92,11 +86,15 @@ h1{
 	padding: 5px;
 }
 
-   .wrapper a:link { 
-color: #0F4470; 
-    text-decoration: none; 
-   } 
-   .wrapper a:visited { 
-color: #0F4470; 
-text-decoration: none; } 
-  .wrapper a:active, hover { text-decoration: none; }
+.wrapper a:link {
+  color: #0F4470;
+  text-decoration: none;
+}
+
+.wrapper a:visited {
+  color: #0F4470;
+  text-decoration: none; }
+
+.wrapper a:active, hover {
+  text-decoration: none;
+}
