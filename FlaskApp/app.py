@@ -7,60 +7,79 @@ app = Flask(__name__)
 
 dbname = "dict.db"
 
-def words_en_ru():
+
+@app.route("/create")
+def set():
     db = sqlite3.connect(dbname)
-    return db.execute("""
-CREATE TABLE IF NOT EXISTS words
-(
-word text
-)
-               """)
+    db.execute("""
+    CREATE TABLE IF NOT EXISTS words_en_ru
+    (
+    word text PRIMARY KEY 
+    )
+                   """)
+    db.execute("""CREATE TABLE IF NOT EXISTS translations_en_ru
+    (
+    word text, 
+    translation text
+    )
+                   """)
+    return "Created new tables"
 
 
-def translation_en_ru():
-    db = sqlite3.connect(dbname)
-    return db.execute("""
-CREATE TABLE IF NOT EXISTS translations
-(
-id_word number, 
-translation text
-)
-               """)
-
-
+@app.route("/words", methods=['GET'])
 def get_all_json():
     db = sqlite3.connect(dbname)
-    cursor = db.execute("SELECT rowid, word FROM words")
+    cursor = db.execute("SELECT rowid, word FROM words_en_ru")
     rows = []
     for tuple in cursor.fetchall():
         rows.append({tuple[0]: tuple[1]})
     return json.dumps(rows)
 
-@app.route("/")
-def hello():
-    words_en_ru()
-    translation_en_ru()
-    return "Created new tables"
-
-
-@app.route("/words", methods=['GET'])
-def get_words():
-    return get_all_json()
-
-
 @app.route("/words", methods=["POST"])
-def add_words():
+def add_word():
     db = sqlite3.connect(dbname)
     ad = request.get_json()
     for name, value in ad.items():
-        db.execute("INSERT INTO words VALUES('%s')" % (value))
+        db.execute("INSERT INTO words_en_ru VALUES('%s')" % (value))
     db.commit()
-    return ""
+    return "ok"
 
 
 @app.route("/words/<id>", methods=['DELETE'])
 def delete_word(id):
     db = sqlite3.connect(dbname)
-    db.execute("DELETE FROM words WHERE rowid=%s" % id)
+    db.execute("DELETE FROM words_en_ru WHERE rowid=%s" % id)
+    db.commit()
+    return "ok"
+
+
+@app.route("/translate", methods=["POST"])
+def get_translatе():
+    db = sqlite3.connect(dbname)
+    ad = request.get_json()
+    for k,v in ad.items():
+        if k == "word":
+            word = v
+        if k == "language":
+            language = v
+    if language == "en_ru":
+        cursor = db.execute("SELECT translation FROM translations_en_ru WHERE word='%s'" % word)
+        translaion = [f[0] for f in cursor.fetchall()][0]
+    return translaion
+
+
+@app.route("/translation", methods=["POST"])
+def add_translation():
+    db = sqlite3.connect(dbname)
+    ad = request.get_json()
+    for k,v in ad.items():
+        if k == "word":
+            word = v
+        if k == "translation":
+            translation = v
+        if k == "language":
+            language = v
+    if language == "en_ru":
+        db.execute("INSERT INTO translations_en_ru VALUES('%s', '%s')" % (word, translation))
     db.commit()
     return "ok"
