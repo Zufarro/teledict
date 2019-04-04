@@ -28,7 +28,7 @@ translation text
         self.last_word_id += 1
         self.db.execute("INSERT INTO words VALUES(%s, '%s')" % (self.last_word_id,word))
 
-    def remove_word(self,id_word):self.db.execute("DELETE FROM words WHERE id=%s"  % id_word)
+    def remove_word(self,id_word):
         self.db.execute("DELETE FROM words WHERE id=%s"  % id_word)
 
     def add_translation(self,id_word,translation):
