@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru_RU">
+  <head>
+    <meta charset="UTF-8">
+    <title>Переводчик</title>
+    <link href="/home/home/git/teledic/static/css/main.css" rel="stylesheet" type="text/css"></link>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <div class="logo">
+          Translater-dictionary
+        </div>
+        <hr>
+      </header>
+      <div class="wrapper">
+        <div class="left_c">
+          <div class="title"><h1>Переводчик</h1></div>
+          <form id="translater" action="">
+           <input type="text" name="word" placeholder="Введите слово" size="">
+           <br>
+           <input type="submit" value="Перевести">
+          </form>
+        </div>
+        <div class="content">
+          <div class="title">
+            <h1>Словарь</h1>
+          </div>
+          <div class="add_new_translation">
+        	   <form>
+        		     <input type="text" name="new_word" placeholder="Введите слово">
+        		     <input type="text" name="new_translate" placeholder="Введите перевод">
+        		     <input type="submit" value="Добавить">
+        	 </form>
+          </div>
+          <br>
+          <table align="center">
+            <thead>
+              <th>
+                Слово
+              </th>
+              <th>
+                Перевод
+              </th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Apple</td>
+                <td>Яблоко</td>
+              </tr>
+            </tbody>
+            <tfoot></tfoot>
+            </table>
+        </div>
+      </div>
+      <footer>
+        <p>
+          Zufar 2019
+        </p>
+      </footer>
+    </div>
+    <script type="text/javascript" src="/home/home/git/teledic/static/js/app.js"></script>
+  </body>
+</html>
