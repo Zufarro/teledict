@@ -1,11 +1,15 @@
 import sqlite3
 import json
 
-from flask import Flask, request
+from flask import Flask, request, send_file
 
 app = Flask(__name__)
 
 dbname = "dict.db"
+
+@app.route("/")
+def main():
+    return send_file('templates/index.html')
 
 
 @app.route("/create")
@@ -73,9 +77,9 @@ def add_translation():
     db = sqlite3.connect(dbname)
     ad = request.get_json()
     for k,v in ad.items():
-        if k == "word":
+        if k == "word_of_added_translation":
             word = v
-        if k == "translation":
+        if k == "translation_to_add":
             translation = v
         if k == "language":
             language = v

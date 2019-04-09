@@ -3,36 +3,49 @@
   <head>
     <meta charset="UTF-8">
     <title>Переводчик</title>
-    <link href="/home/home/git/teledic/static/css/main.css" rel="stylesheet" type="text/css"></link>
+    <link href="/static/css/main.css" rel="stylesheet" type="text/css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script type="text/javascript" src="/static/js/app.js"></script>
   </head>
   <body>
     <div id="app">
       <header>
         <div class="logo">
-          Translater-dictionary
+          {{logo}}
         </div>
         <hr>
       </header>
       <div class="wrapper">
         <div class="left_c">
           <div class="title"><h1>Переводчик</h1></div>
-          <form id="translater" action="">
-           <input type="text" name="word" placeholder="Введите слово" size="">
-           <br>
-           <input type="submit" value="Перевести">
+          <form>
+              <input type="text" v-model="word" placeholder="Введите слово">
           </form>
+            <button v-on:click="getTranslate">Перевести</button>
+            <br>
+            <br>
+             {{ translate }}
         </div>
         <div class="content">
           <div class="title">
             <h1>Словарь</h1>
           </div>
           <div class="add_new_translation">
+            <div class="flex">
+                <form>
+                    <input type="text" v-model="word_to_add" placeholder="Введите слово">
+        	    </form>
+                    <button v-on:click="addWord">Добавить слово</button> {{ result_add_word }}
+            </div>
+            <hr>
+            <div class="flex">
         	   <form>
-        		     <input type="text" name="new_word" placeholder="Введите слово">
-        		     <input type="text" name="new_translate" placeholder="Введите перевод">
-        		     <input type="submit" value="Добавить">
-        	 </form>
+                 <input type="text" v-model="word_of_added_translation" placeholder="Введите слово">
+                 <input type="text" v-model="translation_to_add" placeholder="Введите перевод">
+        	    </form>
+                <button v-on:click="addTranslation">Добавить перевод</button>{{ result_add_translation }}
+            </div>
           </div>
           <br>
           <table align="center">
@@ -60,6 +73,5 @@
         </p>
       </footer>
     </div>
-    <script type="text/javascript" src="/home/home/git/teledic/static/js/app.js"></script>
   </body>
 </html>
