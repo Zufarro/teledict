@@ -25,7 +25,7 @@
             <button v-on:click="getTranslate">Перевести</button>
             <br>
             <br>
-             {{ translate }}
+             {{ translation }}
         </div>
         <div class="content">
           <div class="title">
@@ -34,17 +34,19 @@
           <div class="add_new_translation">
             <div class="flex">
                 <form>
-                    <input type="text" v-model="word_to_add" placeholder="Введите слово">
+                    <input type="text" v-model="new_word" placeholder="Введите слово">
         	    </form>
-                    <button v-on:click="addWord">Добавить слово</button> {{ result_add_word }}
+                    <button v-on:click="addWord">Добавить слово</button> {{ result_new_word }}
             </div>
             <hr>
             <div class="flex">
         	   <form>
-                 <input type="text" v-model="word_of_added_translation" placeholder="Введите слово">
-                 <input type="text" v-model="translation_to_add" placeholder="Введите перевод">
+                 <select v-model="word_to_translate">
+                   <option v-for="item in words">{{item.word}}</option>
+                 </select>
+                 <input type="text" v-model="new_translation" placeholder="Введите перевод">
         	    </form>
-                <button v-on:click="addTranslation">Добавить перевод</button>{{ result_add_translation }}
+                <button v-on:click="addTranslation">Добавить перевод</button>{{ result_new_translation }}
             </div>
           </div>
           <br>
@@ -58,12 +60,20 @@
               </th>
             </thead>
             <tbody>
-              <tr>
-                <td>Apple</td>
-                <td>Яблоко</td>
+              <tr  v-for="item in translations">
+                <td>
+                  {{item.word}}
+                </td>
+                <td>
+                  {{item.translation}}
+                </td>
               </tr>
             </tbody>
-            <tfoot></tfoot>
+            <tfoot>
+              <button v-on:click="refreshTable">
+                Обновить
+              </button>
+            </tfoot>
             </table>
         </div>
       </div>

@@ -3,55 +3,73 @@
     var app = new Vue({
       el: '#app',
       data: {
-        logo: "Translater-dictionary",
+        "translations": [],
+        "words": [],
+        "logo": "Translater-dictionary",
         "word": "",
-        "language": "en_ru",
-        translate: "",
-        "word_to_add": "",
-        result_add_word: "",
-        "word_of_added_translation": "",
-        "translation_to_add": "",
-        result_add_translation: "",
+        "lang": "en",
+        "transl": "ru",
+        "translation": "",
+        "new_word": "",
+        "result_new_word": "",
+        "word_to_translate": "",
+        "new_translation": "",
+        "result_new_translation": "",
       },
       methods: {
         getTranslate: function () {
           var self = this;
           var form = {
-            "word": this.word,
-            "language": this.language
+            "word": this.word
           };
           console.log(form);
-          axios.post("/translate", form).then(function(resp) {
-              console.log(resp);
+          axios.post("/translate/" + this.lang + "/" + this.transl, form).then(function(resp) {
               data = resp.data;
-              self.translate = "Перевод: "+data;
-            });
+              self.translation = "Перевод: "+data;
+          });
         },
         addWord: function () {
           var self = this;
           var form = {
-            /*"language": this.language,*/
-            "add_word": this.add_word
+            "word": this.new_word
           };
-          axios.post("/words", form).then(function(resp) {
+          axios.post("/words/" + this.lang, form).then(function(resp) {
               data = resp.data;
-              self.result_add_word = data;
-            });
+              self.result_new_word = data;
+          });
         },
         addTranslation: function () {
           var self = this;
           var form = {
-            "language": this.language,
-            "word_of_added_translation": this.word_of_added_translation,
-            "translation_to_add": this.translation_to_add
+            "word": this.word_to_translate,
+            "translation": this.new_translation
           };
           console.log(form);
-          axios.post("/translation", form).then(function(resp) {
+          axios.post("/translation/" + this.lang + "/" + this.transl, form).then(function(resp) {
               data = resp.data;
-              self.result_add_translation = data;
-            });
+              self.result_new_translation = data;
+          });
+        },
+        refreshTable: function() {
+          var self = this;
+          axios.get("/translation/" + this.lang + "/" + this.transl).then(function(resp) {
+            console.log(resp.data);
+            self.translations = resp.data;
+          });
+        },
+        refreshWords: function() {
+          var self = this;
+          axios.get("/words/" + this.lang).then(function(resp) {
+            console.log(resp.data);
+            self.words = resp.data;
+          });
         }
       },
+      mounted: function() {
+        console.log("app loaded!");
+        this.refreshTable();
+        this.refreshWords();
+      }
     });
   };
 

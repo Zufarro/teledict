@@ -12,78 +12,93 @@ def main():
     return send_file('templates/index.html')
 
 
-@app.route("/create")
-def set():
+@app.route("/create/<lang>/<transl>", methods=['POST'])
+def create_table(lang, transl):
     db = sqlite3.connect(dbname)
     db.execute("""
-    CREATE TABLE IF NOT EXISTS words_en_ru
+    CREATE TABLE IF NOT EXISTS words_%s
     (
     word text PRIMARY KEY 
     )
-                   """)
-    db.execute("""CREATE TABLE IF NOT EXISTS translations_en_ru
+""" % (lang,))
+    db.execute("""CREATE TABLE IF NOT EXISTS translations_%s_%s
     (
-    word text, 
+    word text PRIMARY KEY, 
     translation text
     )
-                   """)
+""" % (lang, transl))
+    db.close()
     return "Created new tables"
 
 
-@app.route("/words", methods=['GET'])
-def get_all_json():
+@app.route("/words/<lang>", methods=['GET'])
+def get_all_words(lang):
     db = sqlite3.connect(dbname)
-    cursor = db.execute("SELECT rowid, word FROM words_en_ru")
+    cursor = db.execute("SELECT rowid, word FROM words_%s" % (lang,))
     rows = []
-    for tuple in cursor.fetchall():
-        rows.append({tuple[0]: tuple[1]})
+    for item in cursor.fetchall():
+        id, word = item
+        rows.append({"id":id, "word":word})
+    db.close()
     return json.dumps(rows)
 
-@app.route("/words", methods=["POST"])
-def add_word():
+
+@app.route("/words/<lang>", methods=["POST"])
+def add_word(lang):
     db = sqlite3.connect(dbname)
-    ad = request.get_json()
-    for name, value in ad.items():
-        db.execute("INSERT INTO words_en_ru VALUES('%s')" % (value))
+    item = request.get_json()
+    if item["word"]:
+        db.execute("INSERT OR IGNORE INTO words_%s VALUES('%s')" % (lang, item["word"]))
+        db.commit()
+        result = "success"
+    else:
+        result = "Error: missing word"
+    db.close()
+    return result
+
+
+@app.route("/words/<lang>/<id>", methods=['DELETE'])
+def delete_word(lang, id):
+    db = sqlite3.connect(dbname)
+    db.execute("DELETE FROM words_%s WHERE rowid=%s" % (lang, id))
     db.commit()
-    return "ok"
+    db.close()
+    return "success"
 
 
-@app.route("/words/<id>", methods=['DELETE'])
-def delete_word(id):
+@app.route("/translation/<lang>/<transl>", methods=["POST"])
+def add_translation(lang, transl):
     db = sqlite3.connect(dbname)
-    db.execute("DELETE FROM words_en_ru WHERE rowid=%s" % id)
-    db.commit()
-    return "ok"
+    item = request.get_json()
+    if item["word"] and item["translation"]:
+        db.execute("INSERT OR IGNORE INTO translations_%s_%s VALUES('%s', '%s')" % (lang, transl, item["word"], item["translation"]))
+        db.execute("DELETE FROM words_%s WHERE word='%s'" % (lang, item["word"]))
+        db.commit()
+        result = "success"
+    else:
+        result = "Error: missing word or translation"
+    db.close()
+    return result
 
 
-@app.route("/translate", methods=["POST"])
-def get_translatе():
+@app.route("/translate/<lang>/<transl>", methods=["POST"])
+def get_translate(lang, transl):
     db = sqlite3.connect(dbname)
-    ad = request.get_json()
-    for k,v in ad.items():
-        if k == "word":
-            word = v
-        if k == "language":
-            language = v
-    if language == "en_ru":
-        cursor = db.execute("SELECT translation FROM translations_en_ru WHERE word='%s'" % word)
-        translaion = [f[0] for f in cursor.fetchall()][0]
-    return translaion
+    item = request.get_json()
+    cursor = db.execute("SELECT translation FROM translations_%s_%s WHERE word='%s'" % (lang, transl, item["word"]))
+    translate = cursor.fetchone()[0]
+    db.close()
+    return translate
 
 
-@app.route("/translation", methods=["POST"])
-def add_translation():
+@app.route("/translation/<lang>/<transl>", methods=['GET'])  #
+def get_all_translation(lang, transl):
     db = sqlite3.connect(dbname)
-    ad = request.get_json()
-    for k,v in ad.items():
-        if k == "word_of_added_translation":
-            word = v
-        if k == "translation_to_add":
-            translation = v
-        if k == "language":
-            language = v
-    if language == "en_ru":
-        db.execute("INSERT INTO translations_en_ru VALUES('%s', '%s')" % (word, translation))
-    db.commit()
-    return "ok"
+    cursor = db.execute("SELECT rowid, word,translation FROM translations_%s_%s" % (lang, transl))
+    rows = []
+    for item in cursor.fetchall():
+        id, word, translation = item
+        rows.append({"id": id, "word": word, "translation":translation})
+    db.close()
+    return json.dumps(rows)
+
